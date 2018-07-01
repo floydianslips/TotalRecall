@@ -1,7 +1,3 @@
-/**
- * Create the store with dynamic reducers
- */
-
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
@@ -35,11 +31,10 @@ export default function configureStore(initialState = {}, history) {
 
   // Extensions
   store.runSaga = sagaMiddleware.run;
-  store.injectedReducers = {}; // Reducer registry
-  store.injectedSagas = {}; // Saga registry
+  store.injectedReducers = {};
+  store.injectedSagas = {};
 
   // Make reducers hot reloadable, see http://mxs.is/googmo
-  /* istanbul ignore next */
   if (module.hot) {
     module.hot.accept('./reducers', () => {
       store.replaceReducer(createReducer(store.injectedReducers));
