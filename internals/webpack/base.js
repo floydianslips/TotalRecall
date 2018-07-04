@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const includeDllOnTemplate = process.env.NODE_ENV === 'development';
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -17,7 +18,7 @@ module.exports = options => ({
       path: path.resolve(process.cwd(), 'build'), // Compile into js/build.js
       publicPath: '/',
     },
-    options.output,
+    options.output
   ),
   module: {
     rules: [
@@ -88,6 +89,7 @@ module.exports = options => ({
   },
   plugins: options.plugins.concat([
     new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) } }), // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV` inside your code for any environment checks;
+    new CopyWebpackPlugin([{ from: 'app/static/*', to: '[name].[ext]' /* , transform: */ }]),
     HtmlWebpackPluginConfig,
     new webpack.ProvidePlugin({ fetch: 'exports-loader?self.fetch!whatwg-fetch' }),
     new webpack.NamedModulesPlugin(),

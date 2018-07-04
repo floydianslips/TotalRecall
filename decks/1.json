@@ -1,0 +1,32 @@
+[
+  {
+    "front": {
+      "title": "Apple",
+      "subtitle": "Malus pumila",
+      "body": "fruit or vegitable?"
+    },
+    "back": {
+      "body": "It is a fruit!"
+    }
+  },
+  {
+    "front": {
+      "title": "Tomato",
+      "subtitle": "red thing",
+      "body": "is this item a fruit or vegitable? Many people around the world have argued this fact for ages. Some even lobbied for this to be counted as a vegitable so pizza can stay in the menus at schools."
+    },
+    "back": {
+      "body": "It is a vegitable! Joke! Its a fruit"
+    }
+  },
+  {
+    "front": {
+      "title": "Gameboy",
+      "subtitle": "advance",
+      "body": "fruit or vegitable?"
+    },
+    "back": {
+      "body": "neither"
+    }
+  }
+]

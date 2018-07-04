@@ -1,7 +1,7 @@
-// import { createSelector } from 'reselect';
+import { createSelector } from 'reselect';
 
 const selectHome = state => state.home;
 
-export default {
-  selectHome,
-};
+const selectDeck = () => createSelector(selectHome, homeState => homeState && homeState.deck);
+
+export { selectDeck };

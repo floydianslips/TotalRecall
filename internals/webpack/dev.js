@@ -23,7 +23,7 @@ function dependencyHandlers() {
   const dllReferencePlugin = [
     new webpack.DllReferencePlugin({
       context: process.cwd(),
-      manifest: require(manifestPath) // eslint-disable-line
+      manifest: require(manifestPath), // eslint-disable-line
     }),
   ];
 
@@ -40,15 +40,17 @@ function dependencyHandlers() {
 
   // If DLLs are explicitly defined, we automatically create a DLLReferencePlugin for each of them.
   const dllManifests = Object.keys(dllPlugin.dlls).map(name => path.join(dllPath, `/${name}.json`));
-  return dllManifests.map((/* manifestPath */) => {
-    if (!fs.existsSync(path) && !fs.existsSync(manifestPath)) {
-      console.error(`The following Webpack DLL manifest is missing: ${path.basename(manifestPath)}`);
-      console.error(`Expected to find it in ${dllPath}`);
-      console.error('Please run: npm run build:dll');
-      process.exit(0);
+  return dllManifests.map(
+    (/* manifestPath */) => {
+      if (!fs.existsSync(path) && !fs.existsSync(manifestPath)) {
+        console.error(`The following Webpack DLL manifest is missing: ${path.basename(manifestPath)}`);
+        console.error(`Expected to find it in ${dllPath}`);
+        console.error('Please run: npm run build:dll');
+        process.exit(0);
+      }
+      return dllReferencePlugin;
     }
-    return dllReferencePlugin;
-  });
+  );
 }
 
 module.exports = require('./base')({
