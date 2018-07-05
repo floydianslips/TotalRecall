@@ -40,7 +40,6 @@ class Card extends React.Component {
   }
 
   render() {
-    console.log('props', this.props);
     const side = 'front'; // front or back
     const card = this.props.card || {};
     const { title, subtitle, body } = card[side] || '';

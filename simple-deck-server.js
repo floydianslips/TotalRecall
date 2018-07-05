@@ -12,6 +12,28 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/decks', (req, res) => {
+  const decks = [
+    {
+      id: '1',
+      title: 'Fruits',
+      count: 3,
+    },
+    {
+      id: '2',
+      title: 'samples',
+      count: 3,
+    },
+    {
+      id: '3',
+      title: 'null',
+      count: 1,
+    },
+  ];
+
+  res.send(JSON.stringify(decks));
+});
+
 app.get('/deck/:id', (req, res) => {
   const filepath = `${path.join(__dirname, 'decks', req.params.id)}.json`;
   fs.readFile(filepath, { encoding: 'utf8' }, (err, data) => {

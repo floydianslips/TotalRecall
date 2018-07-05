@@ -6,4 +6,6 @@ const selectDeck = () => createSelector(selectHome, homeState => homeState && ho
 
 const selectDeckLength = () => createSelector(selectHome, homeState => homeState && homeState.total);
 
-export { selectDeck, selectDeckLength };
+const selectDeckList = () => createSelector(selectHome, homeState => homeState && homeState.deckList);
+
+export { selectDeck, selectDeckLength, selectDeckList };

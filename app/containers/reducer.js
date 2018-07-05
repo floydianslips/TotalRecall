@@ -1,6 +1,7 @@
 // import { SUBMIT_PHONE_NUMBER } from './Text/Form/Input/constants';
 
 const initialState = {
+  deckList: [],
   deckId: null,
   deck: null,
   correct: 0,
@@ -9,6 +10,8 @@ const initialState = {
 
 function homeReducer(state = initialState, action) {
   switch (action.type) {
+    case 'SET_DECK_LIST':
+      return { ...state, deckList: action.deckList };
     case 'SET_DECK':
       return {
         ...state,
