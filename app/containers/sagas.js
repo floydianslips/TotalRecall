@@ -18,7 +18,7 @@ export function* postSignup({ int }) {
 
   // console.log('deck', deck);
 
-  yield put({ type: 'SET_DECK', deck });
+  yield put({ type: 'SET_DECK', deck, deckId: int });
 }
 
 export default function* signup() {
