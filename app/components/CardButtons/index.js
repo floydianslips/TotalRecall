@@ -14,7 +14,7 @@ const CardButtons = props => (
           <span role="img" aria-label="emoji thumbs down">👎</span>
         </div>
       </div>
-      <div className="btn-box" role="button" tabIndex={-2} type="submit" onClick={() => props.nextCard(false)}>
+      <div className="btn-box" role="button" tabIndex={-2} type="submit" onClick={() => props.nextCard(true)}>
         <div className="tab right">
           <span role="img" aria-label="emoji thumbs up">👍</span>
         </div>

@@ -59,8 +59,8 @@ class App extends React.Component {
     return (
       <Styles>
         <Navbar />
-        <Deck deckId={1} finishDeck={this.finishDeck} />
-        {/* <View /> */}
+        {/* <Deck deckId={1} finishDeck={this.finishDeck} /> */}
+        <View />
       </Styles>
     );
   }

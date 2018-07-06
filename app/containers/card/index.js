@@ -10,6 +10,7 @@ class Card extends React.Component {
     this.state = {
       flipped: false,
       flippedAtLeastOnce: false,
+      locked: false,
     };
 
     this.onKeyDown = this.onKeyDown.bind(this);
@@ -26,9 +27,19 @@ class Card extends React.Component {
     const prev = this.props && this.props.card && this.props.card.front && this.props.card.front.title;
     if (next !== prev) {
       // if new card, reset
+      console.log('new card!');
       this.props.showButtons(false);
-      this.setState(state => ({ ...state, flipped: false, flippedAtLeastOnce: false }));
+      this.setState(state => ({
+        ...state,
+        flipped: false,
+        flippedAtLeastOnce: false,
+        locked: false,
+      }));
     }
+  }
+
+  componentWillUnmount() {
+    this.cardRef.blur();
   }
 
   onClick() {
@@ -43,12 +54,14 @@ class Card extends React.Component {
   onKeyDown(e) {
     switch (e.keyCode) {
       case 37: // left
-        if (this.state.flippedAtLeastOnce) this.props.nextCard(false);
+        if (!this.state.locked && this.state.flippedAtLeastOnce) this.props.nextCard(false);
+        this.setState(state => ({ ...state, locked: true }));
         break;
       case 38: // up
         break;
       case 39: // right
-        if (this.state.flippedAtLeastOnce) this.props.nextCard(true);
+        if (!this.state.locked && this.state.flippedAtLeastOnce) this.props.nextCard(true);
+        this.setState(state => ({ ...state, locked: true }));
         break;
       case 40: // down
         this.onClick();
@@ -59,6 +72,7 @@ class Card extends React.Component {
   }
 
   focus() {
+    console.log('focusing');
     this.cardRef.focus();
   }
 
