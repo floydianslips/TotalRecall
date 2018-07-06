@@ -57,8 +57,8 @@ class Deck extends React.Component {
       <Styles>
         <div className="transform">
           <Card card={card} nextCard={this.nextCard} showButtons={this.showButtons} />
-          <CardButtons showButtons={this.state.showButtons} nextCard={this.nextCard} />
         </div>
+        <CardButtons showButtons={this.state.showButtons} nextCard={this.nextCard} />
       </Styles>
     );
   }
