@@ -14,10 +14,11 @@ class Card extends React.Component {
 
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.focus = this.focus.bind(this);
   }
 
   componentDidMount() {
-    this.cardRef.focus();
+    this.focus();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,6 +58,10 @@ class Card extends React.Component {
     }
   }
 
+  focus() {
+    this.cardRef.focus();
+  }
+
   render() {
     const side = this.state.flipped ? 'back' : 'front';
     const card = this.props.card || {};
@@ -70,6 +75,7 @@ class Card extends React.Component {
           tabIndex={0}
           onClick={this.onClick}
           onKeyDown={this.onKeyDown}
+          onfocusout={this.focus}
           ref={element => {
             this.cardRef = element;
           }}

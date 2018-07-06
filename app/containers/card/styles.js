@@ -9,6 +9,10 @@ const Styles = styled.div`
     border-radius: 5px;
     box-shadow: 3px 2px 5px #c5c5c5;
 
+    :focus {
+      // outline: none;
+    }
+
     .card-head {
       height: 40px;
       background: #47749e;

@@ -31,7 +31,7 @@ class App extends React.Component {
   }
 
   deckClicked(deckSelected) {
-    console.log('deckClicked', deckSelected);
+    log.debug('deckClicked', deckSelected);
     this.setState(state => ({ ...state, deckSelected }));
   }
 

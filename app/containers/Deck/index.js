@@ -43,7 +43,6 @@ class Deck extends React.Component {
 
     // When deck is complete, change view to Score
     if (this.state.currentCard >= this.props.selectDeckLength) {
-      console.log('happeing!');
       this.props.finishDeck();
     }
   }
