@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
 const Styles = styled.div`
+  .show { visibility: initial; }
+  .hidden { visibility: hidden; }
+
   .btn-box {
     margin-top: 20px;
     padding: 0 10px;

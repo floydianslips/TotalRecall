@@ -9,14 +9,25 @@ const Styles = styled.div`
     border-radius: 5px;
     box-shadow: 3px 2px 5px #c5c5c5;
 
-    h1 {
-      background: #4aa9e6;
+    .card-head {
+      height: 40px;
+      background: #47749e;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
     }
 
+    .content-wrapper {
+      height: calc(100% - 40px);
+      display: flex;
+      justify-content: center;
+    }
+
     .content {
-      padding: 0 30px 30px 30px;
+      // height: 100%;
+      font-size: larger;
+      align-self: center;
+      text-align: center;
+      padding: 30px;
     }
   }
 `;

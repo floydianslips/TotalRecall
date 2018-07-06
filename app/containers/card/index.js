@@ -1,38 +1,56 @@
 import React from 'preact';
 import PropTypes from 'prop-types';
-import { createStructuredSelector } from 'reselect';
-import { connect } from 'react-redux';
+// import { createStructuredSelector } from 'reselect';
+// import { connect } from 'react-redux';
 import Styles from './styles';
 
-// {
-//   front: {
-//     title: 'Tomato',
-//     subtitle: 'red thing',
-//     body: 'fruit or vegitable?',
-//   },
-//   back: {
-//     body: 'It is a vegitable! Joke! Its a fruit',
-//   },
-// },
-
 class Card extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      flipped: false,
+      flippedAtLeastOnce: false,
+    };
+
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onClick = this.onClick.bind(this);
+  }
+
   componentDidMount() {
     this.cardRef.focus();
   }
 
-  onClick(e) {
-    console.log('e', e);
+  componentWillReceiveProps(nextProps) {
+    const next = nextProps && nextProps.card && nextProps.card.front && nextProps.card.front.title;
+    const prev = this.props && this.props.card && this.props.card.front && this.props.card.front.title;
+    if (next !== prev) {
+      // if new card, reset
+      this.props.showButtons(false);
+      this.setState(state => ({ ...state, flipped: false, flippedAtLeastOnce: false }));
+    }
+  }
+
+  onClick() {
+    this.setState(state => ({
+      ...state,
+      flipped: !state.flipped,
+      flippedAtLeastOnce: true,
+    }));
+    this.props.showButtons(true);
   }
 
   onKeyDown(e) {
     switch (e.keyCode) {
       case 37: // left
+        if (this.state.flippedAtLeastOnce) this.props.nextCard(false);
         break;
       case 38: // up
         break;
       case 39: // right
+        if (this.state.flippedAtLeastOnce) this.props.nextCard(true);
         break;
       case 40: // down
+        this.onClick();
         break;
       default:
         break;
@@ -40,7 +58,7 @@ class Card extends React.Component {
   }
 
   render() {
-    const side = 'front'; // front or back
+    const side = this.state.flipped ? 'back' : 'front';
     const card = this.props.card || {};
     const { title, subtitle, body } = card[side] || '';
 
@@ -56,10 +74,19 @@ class Card extends React.Component {
             this.cardRef = element;
           }}
         >
-          <h1 className="title">{title}</h1>
-          <div className="content">
-            <i className="subtitle">{subtitle}</i>
-            <div className="body">{body}</div>
+          <div className="card-head" />
+          <div className="content-wrapper">
+            <div className="content">
+              <div className="title">
+                <b>{title}</b>
+              </div>
+              <div className="subtitle">
+                <i>{subtitle}</i>
+              </div>
+              <div className="body">
+                <p>{body}</p>
+              </div>
+            </div>
           </div>
         </div>
       </Styles>
@@ -68,6 +95,9 @@ class Card extends React.Component {
 }
 
 Card.propTypes = {
+  showButtons: PropTypes.func,
+  nextCard: PropTypes.func,
+
   card: PropTypes.shape({
     front: PropTypes.shape({
       title: PropTypes.string,
@@ -75,18 +105,18 @@ Card.propTypes = {
   }),
 };
 
-// export default Card;
+export default Card;
 
-const mapStateToProps = createStructuredSelector(
-  {
-    // getSignupData: selectSignupData(),
-  }
-);
+// const mapStateToProps = createStructuredSelector(
+//   {
+//     // getSignupData: selectSignupData(),
+//   }
+// );
 
-export function mapDispatchToProps(dispatch) {
-  return {
-    // postSignupForm: () => dispatch({ type: 'POST_SIGNUP' }),
-  };
-}
+// export function mapDispatchToProps(dispatch) {
+//   return {
+//     // postSignupForm: () => dispatch({ type: 'POST_SIGNUP' }),
+//   };
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Card);
+// export default connect(mapStateToProps, mapDispatchToProps)(Card);

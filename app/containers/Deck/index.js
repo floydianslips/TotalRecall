@@ -13,10 +13,13 @@ class Deck extends React.Component {
     this.state = {
       deck: null,
       currentCard: 0,
+      showButtons: false,
     };
 
     this.props.dispatchGetDeck(props.deckId);
+
     this.nextCard = this.nextCard.bind(this);
+    this.showButtons = this.showButtons.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -40,8 +43,13 @@ class Deck extends React.Component {
 
     // When deck is complete, change view to Score
     if (this.state.currentCard >= this.props.selectDeckLength) {
+      console.log('happeing!');
       this.props.finishDeck();
     }
+  }
+
+  showButtons(bool) {
+    this.setState(state => ({ ...state, showButtons: bool }));
   }
 
   render() {
@@ -49,8 +57,8 @@ class Deck extends React.Component {
     return (
       <Styles>
         <div className="transform">
-          <Card card={card} nextCard={this.nextCard} />
-          <CardButtons nextCard={this.nextCard} />
+          <Card card={card} nextCard={this.nextCard} showButtons={this.showButtons} />
+          <CardButtons showButtons={this.state.showButtons} nextCard={this.nextCard} />
         </div>
       </Styles>
     );
