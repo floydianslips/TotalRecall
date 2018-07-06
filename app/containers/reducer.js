@@ -2,8 +2,9 @@
 
 const initialState = {
   deckList: [],
-  deckId: null,
   deck: null,
+
+  deckId: null,
   correct: 0,
   total: 0,
 };
@@ -18,6 +19,7 @@ function homeReducer(state = initialState, action) {
         deck: action.deck,
         total: action.deck.length,
         deckId: action.deckId,
+        correct: 0,
       };
     case 'CLEAR_DECK_STORE':
       return { ...state, deck: null };

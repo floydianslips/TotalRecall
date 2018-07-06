@@ -4,8 +4,12 @@ const selectHome = state => state.home;
 
 const selectDeck = () => createSelector(selectHome, homeState => homeState && homeState.deck);
 
-const selectDeckLength = () => createSelector(selectHome, homeState => homeState && homeState.total);
-
 const selectDeckList = () => createSelector(selectHome, homeState => homeState && homeState.deckList);
 
-export { selectDeck, selectDeckLength, selectDeckList };
+const selectDeckLength = () => createSelector(selectHome, homeState => homeState && homeState.total);
+
+const selectDeckCorrect = () => createSelector(selectHome, homeState => homeState && homeState.correct);
+
+const selectDeckId = () => createSelector(selectHome, homeState => homeState && homeState.deckId);
+
+export { selectDeck, selectDeckList, selectDeckLength, selectDeckCorrect, selectDeckId };

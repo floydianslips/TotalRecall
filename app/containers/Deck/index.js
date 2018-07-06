@@ -34,14 +34,14 @@ class Deck extends React.Component {
     return true;
   }
 
-  // componentWillUpdate(nextProps) {
-  //   console.log('componentWillUpdate', this.state);
-  // }
-
   nextCard(isCorrect) {
-    if (this.state.currentCard + 1 >= this.props.selectDeckLength) return; // todo: end game
     this.setState(state => ({ ...state, currentCard: state.currentCard + 1 }));
     if (isCorrect) this.props.dispatchAddCorrect();
+
+    // When deck is complete, change view to Score
+    if (this.state.currentCard >= this.props.selectDeckLength) {
+      this.props.finishDeck();
+    }
   }
 
   render() {
@@ -59,6 +59,7 @@ class Deck extends React.Component {
 
 Deck.propTypes = {
   deckId: PropTypes.number,
+  finishDeck: PropTypes.func,
 
   dispatchGetDeck: PropTypes.func,
   dispatchClearDeckStore: PropTypes.func,
