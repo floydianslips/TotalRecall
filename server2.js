@@ -6,8 +6,8 @@ const morgan = require('morgan');
 const path = require('path');
 const db = require('./models');
 
-const { User, Score } = db;
-// const User = require('./models/user');
+const { user, score } = db;
+// const user = require('./models/user');
 
 
 const app = express(); // invoke an instance of express application.
@@ -56,7 +56,7 @@ app.get('/', sessionChecker, (req, res) => {
 app.get('/test', (req, res) => {
   console.log('user', req.session.user, req.cookies.user_sid);
   res.send('ok');
-  Score.create({
+  score.create({
     score: 100,
     userId: req.session.user.id,
     deckId: 1,
@@ -70,7 +70,7 @@ app
     res.sendFile(path.join(__dirname, '/public/signup.html'));
   })
   .post((req, res) => {
-    User.create({
+    user.create({
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
@@ -93,7 +93,7 @@ app
   .post((req, res) => {
     const { username, password } = req.body;
 
-    User.findOne({ where: { username } }).then(user => {
+    user.findOne({ where: { username } }).then(user => {
       if (!user) {
         res.redirect('/login');
       } else if (!user.validPassword(password)) {
