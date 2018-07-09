@@ -1,5 +1,6 @@
 import React from 'preact';
 import PropTypes from 'prop-types';
+import log from 'components/Logger';
 // import { createStructuredSelector } from 'reselect';
 // import { connect } from 'react-redux';
 import Styles from './styles';
@@ -72,8 +73,12 @@ class Card extends React.Component {
   }
 
   focus() {
-    console.log('focusing');
-    this.cardRef.focus();
+    try {
+      log.debug('focusing');
+      this.cardRef.focus();
+    } catch (e) {
+      (() => {})();
+    }
   }
 
   render() {

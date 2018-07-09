@@ -26,6 +26,11 @@ npm install \
 ```
 Note: If you get errors, try installing without the -g flag. Eslint may not see alias resolution from the global installation. (eg: react is aliased to preact)
 
+## Anki Deck Conversion
+To convert Anki decks to the appropriate format, download Anki for desktop, download the decks you want to convert and install this extension: https://ankiweb.net/shared/info/1589071665. This extension is not made by me but will get the deck in a format that the converter will read. Export to "JSON" with only _____ selected in the export options.
+
+...
+
 ## Todo
 * Alias react to preact but work with eslint
 

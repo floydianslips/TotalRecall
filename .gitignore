@@ -1,5 +1,6 @@
 .env
 .vscode/
+flashy.sqlite
 
 # Don't check auto-generated stuff into git
 coverage
