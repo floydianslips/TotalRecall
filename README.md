@@ -29,6 +29,10 @@ Note: If you get errors, try installing without the -g flag. Eslint may not see 
 ## Anki Deck Conversion
 To convert Anki decks to the appropriate format, download Anki for desktop, download the decks you want to convert and install this extension: https://ankiweb.net/shared/info/1589071665. This extension is not made by me but will get the deck in a format that the converter will read. Export to "JSON" with only _____ selected in the export options.
 
+Be sure to edit internals/anki2json/index.js. Lines 7-19 describe how you want to map the fields of the anki deck to this new deck. Both front/back.
+
+Then run `node internals/anki2json/index.js`. The input file will be "sample.json" by default. Does not accept parameters passed in at this time.
+
 ...
 
 ## Todo
