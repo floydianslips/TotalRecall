@@ -23,12 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     models.user.hasMany(models.score);
   };
 
-  // todo: lookup v4 instanceMethod. They changed the way it is done.
-  // user.instanceMethods = {
-  //   validPassword: password => {
-  //     return bcrypt.compareSync(password, this.password);
-  //   },
-  // };
+  user.prototype.validPassword = password => bcrypt.compareSync(password, this.password);
 
   return user;
 };
