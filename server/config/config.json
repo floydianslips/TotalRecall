@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": null,
+    "password": null,
+    "database": "database_development",
+    "dialect": "sqlite",
+    "storage": "flashy.sqlite"
+  },
+  "test": {
+    "username": null,
+    "password": null,
+    "database": "database_test",
+    "dialect": "sqlite",
+    "storage": "flashy.sqlite"
+  },
+  "production": {
+    "username": null,
+    "password": null,
+    "database": "database_production",
+    "dialect": "sqlite",
+    "storage": "flashy.sqlite"
+  }
+}

@@ -52,7 +52,8 @@ class Deck extends React.Component {
   }
 
   render() {
-    const card = this.state.deck && this.state.deck[this.state.currentCard];
+    const card = this.state.deck && this.state.deck && this.state.deck.cards[this.state.currentCard];
+    console.log('here', this.state.deck, this.state.currentCard);
     return (
       <Styles>
         <div className="transform">
