@@ -36,6 +36,7 @@ export function* postLogin({ obj }) {
 
   const jwt = yield ajax({
     method: 'POST',
+    // url: 'http://localhost:3001/signup',
     url: 'http://localhost:3001/login',
     data,
   });

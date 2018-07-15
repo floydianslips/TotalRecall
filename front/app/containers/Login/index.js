@@ -21,6 +21,7 @@ class Login extends React.Component {
 
   submit(event) {
     event.preventDefault();
+    console.log('event', event);
     const { username, password } = this.state;
     this.setState(state => Object.assign({}, state, { disabled: true }));
     this.props.dispatchLogin({ username, password });
