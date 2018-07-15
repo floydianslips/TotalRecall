@@ -12,4 +12,13 @@ const selectDeckCorrect = () => createSelector(selectHome, homeState => homeStat
 
 const selectDeckId = () => createSelector(selectHome, homeState => homeState && homeState.deckId);
 
-export { selectDeck, selectDeckList, selectDeckLength, selectDeckCorrect, selectDeckId };
+const selectLoggedIn = () => createSelector(selectHome, homeState => homeState && homeState.loggedIn);
+
+export {
+  selectDeck,
+  selectDeckList,
+  selectDeckLength,
+  selectDeckCorrect,
+  selectDeckId,
+  selectLoggedIn,
+};

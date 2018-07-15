@@ -7,9 +7,6 @@ const path = require('path');
 const db = require('./models');
 
 const { user, score } = db;
-// const user = require('./models/user');
-
-
 const app = express(); // invoke an instance of express application.
 app.set('port', 9000); // set our application port
 app.use(morgan('dev')); // set morgan to log info about our requests for development use.
@@ -29,38 +26,26 @@ app.use(
   })
 );
 
-// This middleware will check if user's cookie is still saved in browser and user is not set, then automatically log the user out.
-// This usually happens when you stop your express server after login, your cookie still remains saved in the browser.
+/* This middleware will check if user's cookie is still saved in browser and user
+is not set, then automatically log the user out. This usually happens when you
+stop your express server after login, your cookie still remains saved in the browser. */
 app.use((req, res, next) => {
-  if (req.cookies.user_sid && !req.session.user) {
-    res.clearCookie('user_sid');
-  }
+  if (req.cookies.user_sid && !req.session.user) res.clearCookie('user_sid');
   next();
 });
 
 // middleware function to check for logged-in users
 const sessionChecker = (req, res, next) => {
   console.log('user', req.session.user, req.cookies.user_sid);
-  if (req.session.user && req.cookies.user_sid) {
-    res.redirect('/dashboard');
-  } else {
-    next();
-  }
+  if (req.session.user && req.cookies.user_sid) res.redirect('/dashboard');
+  else next();
 };
+
+// ========================= Routes ========================================= //
 
 // route for Home-Page
 app.get('/', sessionChecker, (req, res) => {
   res.redirect('/login');
-});
-
-app.get('/test', (req, res) => {
-  console.log('user', req.session.user, req.cookies.user_sid);
-  res.send('ok');
-  score.create({
-    score: 100,
-    userId: req.session.user.id,
-    deckId: 1,
-  });
 });
 
 // route for user signup
@@ -75,13 +60,13 @@ app
       email: req.body.email,
       password: req.body.password,
     })
-      .then(user => {
-        req.session.user = user.dataValues;
-        res.redirect('/dashboard');
-      })
-      .catch(() => {
-        res.redirect('/signup');
-      });
+    .then(user => {
+      req.session.user = user.dataValues;
+      res.redirect('/dashboard');
+    })
+    .catch(() => {
+      res.redirect('/signup');
+    });
   });
 
 // route for user Login
@@ -105,20 +90,20 @@ app
     });
   });
 
-// route for user's dashboard
-app.get('/dashboard', (req, res) => {
-  if (req.session.user && req.cookies.user_sid) {
-    res.sendFile(path.join(__dirname, '/public/dashboard.html'));
-  } else {
-    res.redirect('/login');
-  }
-});
-
 // route for user logout
 app.get('/logout', (req, res) => {
   if (req.session.user && req.cookies.user_sid) {
     res.clearCookie('user_sid');
     res.redirect('/');
+  } else {
+    res.redirect('/login');
+  }
+});
+
+// route for user's dashboard
+app.get('/dashboard', (req, res) => {
+  if (req.session.user && req.cookies.user_sid) {
+    res.sendFile(path.join(__dirname, '/public/dashboard.html'));
   } else {
     res.redirect('/login');
   }
@@ -131,3 +116,13 @@ app.use((req, res /* , next */) => {
 
 // start the express server
 app.listen(app.get('port'), () => console.log(`App started on port ${app.get('port')}`));
+
+// app.get('/test', (req, res) => {
+//   console.log('user', req.session.user, req.cookies.user_sid);
+//   res.send('ok');
+//   score.create({
+//     score: 100,
+//     userId: req.session.user.id,
+//     deckId: 1,
+//   });
+// });

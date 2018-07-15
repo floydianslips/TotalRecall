@@ -7,13 +7,14 @@ import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import Navbar from 'components/Navbar';
 import List from 'containers/List';
+import Login from 'containers/Login';
 import log from 'components/Logger';
 import Deck from './Deck';
 import Score from './Score';
 import reducer from './reducer';
 import saga from './sagas';
 import Styles from './styles';
-// import { selectDeckList } from './selectors';
+import { selectLoggedIn } from './selectors';
 
 /* eslint-disable react/prefer-stateless-function */
 class App extends React.Component {
@@ -48,7 +49,9 @@ class App extends React.Component {
     /* eslint-disable no-else-return */
     const { deckSelected } = this.state;
     const View = () => {
-      if (deckSelected === -1) {
+      if (this.props.selectLoggedIn === false) {
+        return <Login />;
+      } else if (deckSelected === -1) {
         return <Score submit={this.submit} />;
       } else if (deckSelected > 0) {
         return <Deck deckId={deckSelected} finishDeck={this.finishDeck} />;
@@ -68,6 +71,7 @@ class App extends React.Component {
 
 App.propTypes = {
   dispatchGetDeckList: PropTypes.func,
+  selectLoggedIn: PropTypes.bool,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -76,11 +80,9 @@ export function mapDispatchToProps(dispatch) {
   };
 }
 
-const mapStateToProps = createStructuredSelector(
-  {
-    // selectDeckList: selectDeckList(),
-  }
-);
+const mapStateToProps = createStructuredSelector({
+  selectLoggedIn: selectLoggedIn(),
+});
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 const withReducer = injectReducer({ key: 'home', reducer });

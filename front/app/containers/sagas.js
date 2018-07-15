@@ -28,7 +28,24 @@ export function* getDeck({ int }) {
   yield put({ type: 'SET_DECK', deck, deckId: int });
 }
 
+export function* postLogin({ obj }) {
+  const { username, password } = obj;
+  const data = new URLSearchParams();
+  data.append('username', username);
+  data.append('password', password);
+
+  const jwt = yield ajax({
+    method: 'POST',
+    url: 'http://localhost:3001/login',
+    data,
+  });
+
+  console.log('jwt response', jwt);
+  yield put({ type: 'SET_JWT', jwt });
+}
+
 export default function* signup() {
   yield takeLatest('GET_DECK_LIST', getDeckList);
   yield takeLatest('GET_DECK', getDeck);
+  yield takeLatest('POST_LOGIN', postLogin);
 }

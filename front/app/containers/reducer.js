@@ -1,6 +1,7 @@
 // import { SUBMIT_PHONE_NUMBER } from './Text/Form/Input/constants';
 
 const initialState = {
+  loggedIn: false,
   deckList: [],
   deck: null,
 
@@ -25,6 +26,8 @@ function homeReducer(state = initialState, action) {
       return { ...state, deck: null };
     case 'ADD_CORRECT':
       return { ...state, correct: state.correct + 1 };
+    case 'SET_LOGGED_IN':
+      return { ...state, loggedIn: state.bool };
     default:
       return state;
   }
