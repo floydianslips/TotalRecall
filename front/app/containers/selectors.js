@@ -12,7 +12,7 @@ const selectDeckCorrect = () => createSelector(selectHome, homeState => homeStat
 
 const selectDeckId = () => createSelector(selectHome, homeState => homeState && homeState.deckId);
 
-const selectLoggedIn = () => createSelector(selectHome, homeState => homeState && homeState.loggedIn);
+const selectJWT = () => createSelector(selectHome, homeState => homeState && homeState.jwt);
 
 export {
   selectDeck,
@@ -20,5 +20,5 @@ export {
   selectDeckLength,
   selectDeckCorrect,
   selectDeckId,
-  selectLoggedIn,
+  selectJWT,
 };

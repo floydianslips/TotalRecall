@@ -14,7 +14,7 @@ import Score from './Score';
 import reducer from './reducer';
 import saga from './sagas';
 import Styles from './styles';
-import { selectLoggedIn } from './selectors';
+import { selectJWT } from './selectors';
 
 /* eslint-disable react/prefer-stateless-function */
 class App extends React.Component {
@@ -24,7 +24,7 @@ class App extends React.Component {
       deckSelected: null,
     };
 
-    props.dispatchGetDeckList();
+    // props.dispatchGetDeckList();
 
     this.deckClicked = this.deckClicked.bind(this);
     this.finishDeck = this.finishDeck.bind(this);
@@ -49,13 +49,17 @@ class App extends React.Component {
     /* eslint-disable no-else-return */
     const { deckSelected } = this.state;
     const View = () => {
-      if (this.props.selectLoggedIn === false) {
+      if (!this.props.selectJWT) {
+        console.log('1');
         return <Login />;
       } else if (deckSelected === -1) {
+        console.log('2');
         return <Score submit={this.submit} />;
       } else if (deckSelected > 0) {
+        console.log('3');
         return <Deck deckId={deckSelected} finishDeck={this.finishDeck} />;
       }
+      console.log('4');
       return <List deckClicked={this.deckClicked} />;
     };
 
@@ -71,17 +75,17 @@ class App extends React.Component {
 
 App.propTypes = {
   dispatchGetDeckList: PropTypes.func,
-  selectLoggedIn: PropTypes.bool,
+  selectJWT: PropTypes.string,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    dispatchGetDeckList: () => dispatch({ type: 'GET_DECK_LIST' }),
+    // dispatchGetDeckList: () => dispatch({ type: 'GET_DECK_LIST' }),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
-  selectLoggedIn: selectLoggedIn(),
+  selectJWT: selectJWT(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

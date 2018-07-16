@@ -5,36 +5,54 @@ import { connect } from 'react-redux';
 import { selectDeckList } from '../selectors';
 import Styles from './styles';
 
-const List = props => {
-  const decks =
-    props.selectDeckList &&
-    props.selectDeckList.map((deck, idx) => (
-      <div
-        className="deck"
-        key={deck.id}
-        onClick={() => props.deckClicked(deck.id)}
-        onKeyDown={() => props.deckClicked(deck.id)}
-        role="button"
-        tabIndex={idx}
-      >
-        <b className="deck-title">{deck.title}</b>
-        <div className="deck-count">{deck.count} cards</div>
-      </div>
-    ));
+class List extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <Styles>
-      <div className="deck-containers">{decks}</div>
-    </Styles>
-  );
-};
+    const listIsEmpty = props.selectDeckList && props.selectDeckList.length === 0;
+    if (listIsEmpty) props.dispatchGetDeckList();
+  }
+
+  render() {
+    const decks =
+      this.props.selectDeckList &&
+      this.props.selectDeckList.map &&
+      this.props.selectDeckList.map((deck, idx) => (
+        <div
+          className="deck"
+          key={deck.id}
+          onClick={() => this.props.deckClicked(deck.id)}
+          onKeyDown={() => this.props.deckClicked(deck.id)}
+          role="button"
+          tabIndex={idx}
+        >
+          <b className="deck-title">{deck.title}</b>
+          <div className="deck-count">{deck.count} cards</div>
+        </div>
+      ));
+
+    return (
+      <Styles>
+        <div className="deck-containers">{decks}</div>
+      </Styles>
+    );
+  }
+}
 
 List.propTypes = {
   selectDeckList: PropTypes.arrayOf(PropTypes.object),
+  dispatchGetDeckList: PropTypes.arrayOf(PropTypes.object),
+  deckClicked: PropTypes.func,
 };
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    dispatchGetDeckList: () => dispatch({ type: 'GET_DECK_LIST' }),
+  };
+}
 
 const mapStateToProps = createStructuredSelector({
   selectDeckList: selectDeckList(),
 });
 
-export default connect(mapStateToProps, undefined)(List);
+export default connect(mapStateToProps, mapDispatchToProps)(List);
