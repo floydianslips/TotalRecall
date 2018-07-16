@@ -37,9 +37,7 @@ export function* getDeckList() {
   const get = yield ajax({
     method: 'GET',
     url: 'http://localhost:3001/decks',
-    headers: {
-      'x-access-token': jwtToken,
-    },
+    headers: { 'x-access-token': jwtToken },
   });
   console.log('decklist', get);
 
@@ -48,13 +46,16 @@ export function* getDeckList() {
 }
 
 export function* getDeck({ int }) {
+  const jwtToken = yield getJwtFromRedux();
   const get = yield ajax({
     method: 'GET',
     url: `http://localhost:3001/deck/${int}`,
+    headers: { 'x-access-token': jwtToken },
   });
 
-  const deck = (get && get.data) || null;
+  const deck = (get && get.data && get.data.deck) || null;
   const deckId = int;
+  console.log('deck', get, deck, deckId);
   yield put({ type: 'SET_DECK', deck, deckId });
 }
 

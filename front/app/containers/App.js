@@ -55,7 +55,7 @@ class App extends React.Component {
       } else if (deckSelected === -1) {
         console.log('2');
         return <Score submit={this.submit} />;
-      } else if (deckSelected > 0) {
+      } else if (deckSelected) {
         console.log('3');
         return <Deck deckId={deckSelected} finishDeck={this.finishDeck} />;
       }

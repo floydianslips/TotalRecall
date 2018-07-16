@@ -10,7 +10,10 @@ class List extends React.Component {
     super(props);
 
     const listIsEmpty = props.selectDeckList && props.selectDeckList.length === 0;
-    if (listIsEmpty) props.dispatchGetDeckList();
+    if (listIsEmpty) {
+      console.log('dispatching GetDeckList(). Hopefully only once');
+      props.dispatchGetDeckList();
+    }
   }
 
   render() {
@@ -20,13 +23,14 @@ class List extends React.Component {
       this.props.selectDeckList.map((deck, idx) => (
         <div
           className="deck"
-          key={deck.id}
+          key={deck.name}
           onClick={() => this.props.deckClicked(deck.id)}
           onKeyDown={() => this.props.deckClicked(deck.id)}
           role="button"
           tabIndex={idx}
         >
-          <b className="deck-title">{deck.title}</b>
+          <h4 className="deck-title">{deck.name}</h4>
+          <i className="icon">{deck.icon}</i>
           <div className="deck-count">{deck.count} cards</div>
         </div>
       ));

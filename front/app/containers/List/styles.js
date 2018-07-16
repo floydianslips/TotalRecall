@@ -7,6 +7,16 @@ const Style = styled.div`
     padding: auto 15px;
   }
 
+  .icon {
+    margin: 10px auto;
+    word-wrap: break-word;
+    height: 2em;
+    display: block;
+    font-size: 2em;
+    width: 2em;
+    line-height: 1em;
+  }
+
   .deck {
     padding: 15px;
     vertical-align: middle;

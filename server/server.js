@@ -5,19 +5,17 @@ const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
+const aSync = require('async')
 const db = require('./models');
 
 const SECRET = 'abcdefghijkl'
 
 // const decks = {};
 const deckDir = path.join(__dirname, 'decks');
-const files = fs.readdirSync(deckDir);
-console.log('files in decks/', files);
+const deckList = {};
 const { user, score, deck } = db;
 const app = express(); // invoke an instance of express application.
-user.sync();
-score.sync();
-deck.sync();
+
 
 // app.use(cookieParser()); // initialize cookie-parser to allow us access the cookies stored in the browser.
 app.set('port', 3001); // set our application port
@@ -32,9 +30,14 @@ app.use((req, res, next) => {
 });
 
 /* -------------------------- Look for new decks ---------------------------- */
-async function findOrCreateNewDecks(name) {
-  if (!name) return;
 
+async function databaseSync() {
+  await user.sync();
+  await score.sync();
+  await deck.sync();
+}
+
+async function findOrCreateNewDecks(name) {
   await deck
     .findOrCreate({
       where: { name },
@@ -49,44 +52,49 @@ async function findOrCreateNewDecks(name) {
     });
 }
 
-files.forEach((file, index) => {
-  // const id = file.substring(0, file.lastIndexOf('.'));
+async function forEachDeck(file) {
   if (!/\.json$/.test(file)) return;
-  console.log('file', file);
-  
-  let deckName = null;
+
+  let id = null;
+  let name = null;
+  let icon = null;
+  let count = null;
+
   try {
     const jsonUTF8 = fs.readFileSync(path.join(deckDir, file), 'utf8');
     const json = JSON.parse(jsonUTF8);
-    deckName = (json && json.id) || null;
+    if (json) {
+      id = json.id;
+      name = json.name;
+      icon = json.icon;
+      count = (json.cards && json.cards.length) || null;
+    }
   } catch (e) {
-    deckName = null;
+    id = null;
   }
 
-  console.log('executing', deckName);
-  findOrCreateNewDecks(deckName);
+  if (!id) return;
+  await findOrCreateNewDecks(id);
   
-  // const deckInDB = db.prepare(`select name from decks where name = '${id}'`).get();
-  // if (!deckInDB) {
-  //   db.prepare(`insert into decks ("name") values ('${id}');`).run();
-    // console.log('deck not in db');
-    // console.log('Found a new deck', id, '. Added  it to the deck table');
-  // } else {
-  //   console.log('deck is in db');
-  // }
+  deckList[id] = {
+    id,
+    name,
+    icon,
+    count,
+  };
+}
 
-  // console.log('reading', id);
-  // const tmp = fs.readFileSync(path.join(deckDir, `${id}.json`), 'utf8');
-  // let tmpJson = {};
-  // try {
-  //   tmpJson = JSON.parse(tmp);
-  // } catch (e) {
-  //   tmpJson = {};
-  // }
-  // decks[id] = {};
-  // decks[id].id = (tmpJson && tmpJson.id) || null;
-  // decks[id].modified = fs.statSync(path.join(deckDir, `${id}.json`)).mtime;
-});
+async function init() {
+  await databaseSync();
+  const dir = fs.readdirSync(deckDir);
+  aSync.eachSeries(dir, forEachDeck, (err) => {
+    if (err) console.log('err', err);
+    console.log('all decks', deckList);
+    console.log('--------- Ready ---------');
+  })
+}
+
+init();
 
 // ============================ Route Helpers =============================== //
 
@@ -142,14 +150,34 @@ app.post('/login', (req, res) => {
 });
 
 app.get('/decks', isAuthorized, (req, res) => {
-  console.log('isAuthed', req.jwtDecoded);
-  res.send('decks!!!')
+  // console.log('isAuthed', req.jwtDecoded);
+  res.type('application/json');
+  res.send(Object.values(deckList));
 });
 
-// app.get('/api/decks', (req, res) => {
-//   res.type('application/json');
-//   res.json(createDeckMetadata(decks));
-// });
+app.get('/deck/:deckId', isAuthorized, (req, res) => {
+  res.type('application/json');
+  const { deckId } = req.params;
+  console.log('reading path', path.join(deckDir, `${deckId}.json`));
+  fs.readFile(path.join(deckDir, `${deckId}.json`), { encoding: 'utf8' }, (err, data) => {
+    if (err) {
+      console.log('err', err);
+      res.statusCode = 404;
+      res.send({ auth: true, status: 404, statusText: 'Deck not found' });
+    } else {
+      console.log('success', data);
+      let deck = {};
+      try {
+        deck = JSON.parse(data);
+        res.send({ auth: true, deck });
+      } catch (e) {
+        deck = {};
+        res.status(500);
+        res.send({ auth: true, status: 500, statusText: 'Error parsing JSON' });
+      }
+    }
+  });
+});
 
 console.log('listening on 3001');
 app.listen(3001);
