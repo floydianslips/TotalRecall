@@ -60,15 +60,15 @@ export function* getDeck({ int }) {
 }
 
 export function* postLogin({ obj }) {
-  const { username, password } = obj;
+  const { username, password, createMode } = obj;
   const data = new URLSearchParams();
   data.append('username', username);
   data.append('password', password);
 
+  const url = createMode ? 'http://localhost:3001/signup' : 'http://localhost:3001/login';
   const post = yield ajax({
     method: 'POST',
-    // url: 'http://localhost:3001/signup',
-    url: 'http://localhost:3001/login',
+    url,
     data,
   });
 

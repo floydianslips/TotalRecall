@@ -11,20 +11,22 @@ class Login extends React.Component {
     super(props);
     this.state = {
       disabled: false,
+      createMode: false,
       [USERNAME]: '',
       [PASSWORD]: '',
     };
 
     this.updateInputValue = this.updateInputValue.bind(this);
     this.submit = this.submit.bind(this);
+    this.createNewAccount = this.createNewAccount.bind(this);
   }
 
   submit(event) {
     event.preventDefault();
     console.log('event', event);
-    const { username, password } = this.state;
+    const { username, password, createMode } = this.state;
     this.setState(state => Object.assign({}, state, { disabled: true }));
-    this.props.dispatchLogin({ username, password });
+    this.props.dispatchLogin({ username, password, createMode });
   }
 
   updateInputValue(event) {
@@ -33,10 +35,18 @@ class Login extends React.Component {
     this.setState(state => Object.assign({}, state, { [id]: event.target.value }));
   }
 
+  createNewAccount(event) {
+    event.preventDefault();
+    this.setState(state => Object.assign({}, state, { createMode: !state.createMode }));
+  }
+
   render() {
+    const buttonClass = 'button' + (this.state.createMode ? ' warning' : '');
+
     return (
       <Styles>
         <form onSubmit={this.submit}>
+          <label htmlFor={USERNAME}>Username</label>
           <input
             id={USERNAME}
             type="text"
@@ -48,6 +58,7 @@ class Login extends React.Component {
             autoComplete="username"
             disabled={this.state.disabled}
           />
+          <label htmlFor={PASSWORD}>Password</label>
           <input
             id={PASSWORD}
             type="password"
@@ -59,7 +70,15 @@ class Login extends React.Component {
             autoComplete="current-password"
             disabled={this.state.disabled}
           />
-          <input className="button" type="submit" value="Login" disabled={this.state.disabled} />
+          <a href="#" onClick={this.createNewAccount}>
+            {this.state.createMode ? 'Login With Existing Account' : 'Create New Account'}
+          </a>
+          <input
+            className={buttonClass}
+            type="submit"
+            disabled={this.state.disabled}
+            value={this.state.createMode ? 'Create New Account' : 'Login'}
+          />
         </form>
       </Styles>
     );
