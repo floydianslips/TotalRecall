@@ -74,11 +74,11 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  dispatchGetDeckList: PropTypes.func,
+  // dispatchGetDeckList: PropTypes.func,
   selectJWT: PropTypes.string,
 };
 
-export function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(/* dispatch */) {
   return {
     // dispatchGetDeckList: () => dispatch({ type: 'GET_DECK_LIST' }),
   };

@@ -80,7 +80,7 @@ Deck.propTypes = {
 
 export function mapDispatchToProps(dispatch) {
   return {
-    dispatchGetDeck: int => dispatch({ type: 'GET_DECK', int }),
+    dispatchGetDeck: str => dispatch({ type: 'GET_DECK', str }),
     dispatchClearDeckStore: () => dispatch({ type: 'CLEAR_DECK_STORE' }),
     dispatchAddCorrect: () => dispatch({ type: 'ADD_CORRECT' }),
   };

@@ -37,15 +37,24 @@ async function databaseSync() {
   await deck.sync();
 }
 
-async function findOrCreateNewDecks(name) {
+async function findOrCreateNewDecks({ jsonId, name, icon, count, file }) {
   await deck
     .findOrCreate({
-      where: { name },
-      defaults: { name },
+      where: { name: jsonId },
+      defaults: { name: jsonId },
     })
     .spread((deck, created) => {
       console.log('found deck', deck.id);
       console.log('isCreated', created);
+
+      deckList[deck.id] = {
+        id: deck.id,
+        jsonId,
+        filename: file,
+        name,
+        icon,
+        count,
+      };
     })
     .catch(err => {
       console.log('db err', err);
@@ -55,7 +64,7 @@ async function findOrCreateNewDecks(name) {
 async function forEachDeck(file) {
   if (!/\.json$/.test(file)) return;
 
-  let id = null;
+  let jsonId = null;
   let name = null;
   let icon = null;
   let count = null;
@@ -64,24 +73,24 @@ async function forEachDeck(file) {
     const jsonUTF8 = fs.readFileSync(path.join(deckDir, file), 'utf8');
     const json = JSON.parse(jsonUTF8);
     if (json) {
-      id = json.id;
+      jsonId = json.id;
       name = json.name;
       icon = json.icon;
       count = (json.cards && json.cards.length) || null;
     }
   } catch (e) {
-    id = null;
+    jsonId = null;
   }
 
-  if (!id) return;
-  await findOrCreateNewDecks(id);
+  if (!jsonId) return;
+  await findOrCreateNewDecks({ jsonId, name, icon, count, file });
   
-  deckList[id] = {
-    id,
-    name,
-    icon,
-    count,
-  };
+  // deckList[jsonId] = Object.assign({}, deckList[jsonId], {
+  //   jsonId,
+  //   name,
+  //   icon,
+  //   count,
+  // });
 }
 
 async function init() {
@@ -109,7 +118,6 @@ function isAuthorized(req, res, next) {
   if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 
   jwt.verify(token, SECRET, (err, decoded) => {
-    console.log('token', token);
     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
     req.jwtDecoded = decoded;
     next();
@@ -117,6 +125,38 @@ function isAuthorized(req, res, next) {
 }
 
 // =============================== Routes =================================== //
+
+app.get('/decks', isAuthorized, (req, res) => {
+  // console.log('isAuthed', req.jwtDecoded);
+  res.type('application/json');
+  res.send(Object.values(deckList));
+});
+
+app.get('/deck/:deckId', isAuthorized, (req, res) => {
+  res.type('application/json');
+  const { deckId } = req.params;
+  const deckName = deckList[deckId].filename;
+  console.log('reading path', path.join(deckDir, deckName));
+
+  fs.readFile(path.join(deckDir, deckName), { encoding: 'utf8' }, (err, data) => {
+    if (err) {
+      console.log('err', err);
+      res.statusCode = 404;
+      res.send({ auth: true, status: 404, statusText: 'Deck not found' });
+    } else {
+      console.log('success', data);
+      let deck = {};
+      try {
+        deck = JSON.parse(data);
+        res.send({ auth: true, deck });
+      } catch (e) {
+        deck = {};
+        res.status(500);
+        res.send({ auth: true, status: 500, statusText: 'Error parsing JSON' });
+      }
+    }
+  });
+});
 
 app.post('/signup', (req, res) => {
   user.create({
@@ -149,35 +189,31 @@ app.post('/login', (req, res) => {
   });
 });
 
-app.get('/decks', isAuthorized, (req, res) => {
-  // console.log('isAuthed', req.jwtDecoded);
-  res.type('application/json');
-  res.send(Object.values(deckList));
-});
+app.post('/score', isAuthorized, (req, res) => {
+  const { deckId } = req.body;
+  const postedScore = req.body.score; // name conflict. renamed to postedScore.
+  const userId = (req.jwtDecoded && req.jwtDecoded.id);
 
-app.get('/deck/:deckId', isAuthorized, (req, res) => {
-  res.type('application/json');
-  const { deckId } = req.params;
-  console.log('reading path', path.join(deckDir, `${deckId}.json`));
-  fs.readFile(path.join(deckDir, `${deckId}.json`), { encoding: 'utf8' }, (err, data) => {
-    if (err) {
-      console.log('err', err);
-      res.statusCode = 404;
-      res.send({ auth: true, status: 404, statusText: 'Deck not found' });
-    } else {
-      console.log('success', data);
-      let deck = {};
-      try {
-        deck = JSON.parse(data);
-        res.send({ auth: true, deck });
-      } catch (e) {
-        deck = {};
-        res.status(500);
-        res.send({ auth: true, status: 500, statusText: 'Error parsing JSON' });
-      }
-    }
+  if (!userId) {
+    res.status(400)
+    res.send('No id field present in JWT token. Unable to post score without a specified owner of said score.');
+    return;
+  }
+
+  score.create({
+    score: postedScore,
+    userId,
+    deckId,
+  })
+  .then(row => {
+    console.log('success', row.id, postedScore);
+    res.status(200).send({ auth: true, score: postedScore });
+  })
+  .catch(err => {
+    const message = (err && err.errors && err.errors[0] && err.errors[0].message) || 'Cannot POST new score.'
+    res.status(500).send(message);
   });
-});
+})
 
 console.log('listening on 3001');
 app.listen(3001);

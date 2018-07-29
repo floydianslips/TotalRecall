@@ -45,16 +45,16 @@ export function* getDeckList() {
   yield put({ type: 'SET_DECK_LIST', deckList });
 }
 
-export function* getDeck({ int }) {
+export function* getDeck({ str }) {
   const jwtToken = yield getJwtFromRedux();
   const get = yield ajax({
     method: 'GET',
-    url: `http://localhost:3001/deck/${int}`,
+    url: `http://localhost:3001/deck/${str}`,
     headers: { 'x-access-token': jwtToken },
   });
 
   const deck = (get && get.data && get.data.deck) || null;
-  const deckId = int;
+  const deckId = str;
   console.log('deck', get, deck, deckId);
   yield put({ type: 'SET_DECK', deck, deckId });
 }
@@ -76,8 +76,24 @@ export function* postLogin({ obj }) {
   yield put({ type: 'SET_JWT', str: token });
 }
 
+export function* postScore({ obj }) {
+  const { deckId, score } = obj;
+  const data = new URLSearchParams();
+  data.append('deckId', deckId);
+  data.append('score', score);
+
+  const jwtToken = yield getJwtFromRedux();
+  const post = yield ajax({
+    method: 'POST',
+    url: 'http://localhost:3001/score',
+    data,
+    headers: { 'x-access-token': jwtToken },
+  });
+}
+
 export default function* signup() {
   yield takeLatest('GET_DECK_LIST', getDeckList);
   yield takeLatest('GET_DECK', getDeck);
   yield takeLatest('POST_LOGIN', postLogin);
+  yield takeLatest('POST_SCORE', postScore);
 }
