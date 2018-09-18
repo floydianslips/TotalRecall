@@ -5,31 +5,49 @@ import PropTypes from 'prop-types';
 import { selectDeckLength, selectDeckCorrect, selectDeckId } from '../selectors';
 import Styles from './styles';
 
-const Score = props => {
-  const id = props.selectDeckId;
-  const correct = props.selectDeckCorrect;
-  const amount = props.selectDeckLength;
+class Score extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <Styles>
-      <div className="window">
-        <div className="title">
-          <h4>All Done</h4>
-          <i>Here is how you did</i>
-        </div>
-        <div className="results">
-          <p>Deck: {id}</p>
-          <p>Score: {correct}/{amount}</p>
-          <div>
-            <button className="button" type="submit" onClick={props.submit} tabIndex={0}>
-              Done
-            </button>
+    this.deckId = props.selectDeckId;
+    this.correct = props.selectDeckCorrect;
+    this.amount = props.selectDeckLength;
+    this.score = parseInt((this.correct / this.amount) * 100, 10);
+
+    this.submit = this.submit.bind(this);
+  }
+
+  submit() {
+    console.log('submitting score');
+    this.props.submit(this.score);
+    this.props.dispatchPostScore({
+      deckId: this.deckId,
+      score: this.score,
+    });
+  }
+
+  render() {
+    return (
+      <Styles>
+        <div className="window">
+          <div className="title">
+            <h4>All Done</h4>
+            <i>Here is how you did</i>
+          </div>
+          <div className="results">
+            <p>Deck: {this.deckId}</p>
+            <p>Score: {this.correct}/{this.amount}</p>
+            <div>
+              <button className="button" type="submit" onClick={this.submit} tabIndex={0}>
+                Done
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </Styles>
-  );
-};
+      </Styles>
+    );
+  }
+}
 
 Score.propTypes = {
   selectDeckLength: PropTypes.number,
@@ -37,7 +55,14 @@ Score.propTypes = {
   selectDeckId: PropTypes.string,
 
   submit: PropTypes.func,
+  dispatchPostScore: PropTypes.func,
 };
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    dispatchPostScore: obj => dispatch({ type: 'POST_SCORE', obj }),
+  };
+}
 
 const mapStateToProps = createStructuredSelector({
   selectDeckLength: selectDeckLength(),
@@ -45,4 +70,4 @@ const mapStateToProps = createStructuredSelector({
   selectDeckId: selectDeckId(),
 });
 
-export default connect(mapStateToProps, undefined)(Score);
+export default connect(mapStateToProps, mapDispatchToProps)(Score);

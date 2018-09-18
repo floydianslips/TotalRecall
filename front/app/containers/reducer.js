@@ -18,7 +18,7 @@ function homeReducer(state = initialState, action) {
       return {
         ...state,
         deck: action.deck,
-        total: action.deck.length,
+        total: (action.deck && action.deck.cards && action.deck.cards.length) || null,
         deckId: action.deckId,
         correct: 0,
       };

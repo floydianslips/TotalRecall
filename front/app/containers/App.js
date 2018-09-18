@@ -56,7 +56,7 @@ class App extends React.Component {
         console.log('2');
         return <Score submit={this.submit} />;
       } else if (deckSelected) {
-        console.log('3');
+        console.log('3', deckSelected);
         return <Deck deckId={deckSelected} finishDeck={this.finishDeck} />;
       }
       console.log('4');
@@ -74,11 +74,11 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  dispatchGetDeckList: PropTypes.func,
+  // dispatchGetDeckList: PropTypes.func,
   selectJWT: PropTypes.string,
 };
 
-export function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(/* dispatch */) {
   return {
     // dispatchGetDeckList: () => dispatch({ type: 'GET_DECK_LIST' }),
   };

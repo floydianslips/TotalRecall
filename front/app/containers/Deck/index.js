@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import CardButtons from 'components/CardButtons';
 import Card from 'containers/Card';
 import Styles from './styles';
-import { selectDeck, selectDeckLength } from '../selectors';
+import { selectDeck } from '../selectors';
 
 class Deck extends React.Component {
   constructor(props) {
@@ -42,7 +42,7 @@ class Deck extends React.Component {
     if (isCorrect) this.props.dispatchAddCorrect();
 
     // When deck is complete, change view to Score
-    if (this.state.currentCard >= this.props.selectDeckLength) {
+    if (this.state.currentCard >= this.state.deck.cards.length) {
       this.props.finishDeck();
     }
   }
@@ -53,7 +53,8 @@ class Deck extends React.Component {
 
   render() {
     const card = this.state.deck && this.state.deck && this.state.deck.cards[this.state.currentCard];
-    console.log('here', this.state.deck, this.state.currentCard);
+    console.log('deck', this.state.deck);
+    console.log('deck/currentCard', this.state.currentCard);
     return (
       <Styles>
         <div className="transform">
@@ -73,13 +74,13 @@ Deck.propTypes = {
   dispatchClearDeckStore: PropTypes.func,
   dispatchAddCorrect: PropTypes.func,
 
-  selectDeckLength: PropTypes.number,
+  // selectDeckLength: PropTypes.number,
   selectDeck: PropTypes.arrayOf(PropTypes.object),
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    dispatchGetDeck: int => dispatch({ type: 'GET_DECK', int }),
+    dispatchGetDeck: str => dispatch({ type: 'GET_DECK', str }),
     dispatchClearDeckStore: () => dispatch({ type: 'CLEAR_DECK_STORE' }),
     dispatchAddCorrect: () => dispatch({ type: 'ADD_CORRECT' }),
   };
@@ -87,7 +88,7 @@ export function mapDispatchToProps(dispatch) {
 
 const mapStateToProps = createStructuredSelector({
   selectDeck: selectDeck(),
-  selectDeckLength: selectDeckLength(),
+  // selectDeckLength: selectDeckLength(),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Deck);
