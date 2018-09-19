@@ -36,7 +36,7 @@ export function* getDeckList() {
   const jwtToken = yield getJwtFromRedux();
   const get = yield ajax({
     method: 'GET',
-    url: 'http://localhost:3001/decks',
+    url: 'decks/',
     headers: { 'x-access-token': jwtToken },
   });
   console.log('decklist', get);
@@ -49,7 +49,7 @@ export function* getDeck({ str }) {
   const jwtToken = yield getJwtFromRedux();
   const get = yield ajax({
     method: 'GET',
-    url: `http://localhost:3001/deck/${str}`,
+    url: `deck/${str}`,
     headers: { 'x-access-token': jwtToken },
   });
 
@@ -65,7 +65,7 @@ export function* postLogin({ obj }) {
   data.append('username', username);
   data.append('password', password);
 
-  const url = createMode ? 'http://localhost:3001/signup' : 'http://localhost:3001/login';
+  const url = createMode ? 'signup' : 'login';
   const post = yield ajax({
     method: 'POST',
     url,
@@ -85,7 +85,7 @@ export function* postScore({ obj }) {
   const jwtToken = yield getJwtFromRedux();
   const post = yield ajax({
     method: 'POST',
-    url: 'http://localhost:3001/score',
+    url: 'score/',
     data,
     headers: { 'x-access-token': jwtToken },
   });

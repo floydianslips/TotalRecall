@@ -126,6 +126,8 @@ function isAuthorized(req, res, next) {
 
 // =============================== Routes =================================== //
 
+app.use(express.static(path.join(__dirname, '../', 'front/', 'build/')));
+
 app.get('/decks', isAuthorized, (req, res) => {
   // console.log('isAuthed', req.jwtDecoded);
   res.type('application/json');
@@ -216,4 +218,4 @@ app.post('/score', isAuthorized, (req, res) => {
 })
 
 console.log('listening on 3001');
-app.listen(7101);
+app.listen(7100);
