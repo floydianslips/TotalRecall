@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const middleware = require('./middleware');
+const backendServer = require('../../../server/server');
 
 const host = process.env.HOST || null; // Let http.Server use its default IPv6/4 host
 const port = parseInt(process.env.PORT || '3000', 10);
@@ -13,6 +14,7 @@ const options = {
 
 middleware(app, options);
 
-app.listen(port, host, (err) => {
-  if (err) console.error(err.message);
-});
+backendServer(app);
+// app.listen(port, host, (err) => {
+//   if (err) console.error(err.message);
+// });
