@@ -18,7 +18,6 @@ const app = express(); // invoke an instance of express application.
 
 
 // app.use(cookieParser()); // initialize cookie-parser to allow us access the cookies stored in the browser.
-app.set('port', 3001); // set our application port
 app.use(morgan('dev')); // set morgan to log info about our requests for development use.
 app.use(bodyParser.urlencoded({ extended: true })); // initialize body-parser to parse incoming parameters requests to req.body
 app.use((req, res, next) => {
@@ -217,5 +216,5 @@ app.post('/score', isAuthorized, (req, res) => {
   });
 })
 
-console.log('listening on 3001');
+console.log('listening on 7101');
 app.listen(7100);
