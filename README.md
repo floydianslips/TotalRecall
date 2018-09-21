@@ -44,6 +44,7 @@ Then run `node internals/anki2json/index.js`. The input file will be "sample.jso
 
 ## Todo
 * Alias react to preact but work with eslint
+* extend JWT tokens into cookies for extended use
 
 ## Dev Notes
 ##### Optional Chaining

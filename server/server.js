@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 const path = require('path');
@@ -18,7 +18,7 @@ const { user, score, deck } = db;
 module.exports = _app => {
   const app = _app || express(); // invoke an instance of express application.
   
-  
+  // todo: extend jwt into cookie use for extended sessions
   // app.use(cookieParser()); // initialize cookie-parser to allow us access the cookies stored in the browser.
   app.use(morgan('dev')); // set morgan to log info about our requests for development use.
   app.use(bodyParser.urlencoded({ extended: true })); // initialize body-parser to parse incoming parameters requests to req.body
@@ -114,8 +114,8 @@ module.exports = _app => {
     });
   }
   
-  function isAuthorized(req, res, next) {
-    var token = req.headers['x-access-token'];
+  function isAuthorized(req, res, next) { // eslint-disable-line consistent-return
+    const token = req.headers['x-access-token'];
     if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
   
     jwt.verify(token, SECRET, (err, decoded) => {
