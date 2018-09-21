@@ -12,7 +12,7 @@ fi
 
 echo "Attempting to stop the last docker container with the tag total-recall"
 
-sudo docker stop `docker ps -a -q --filter ancestor=total-recall`
+sudo docker stop `docker ps -a -l -q --filter ancestor=total-recall`
 
 if [ $? -eq 0 ];then
    echo "Successfully stopped the total-recall container!"
