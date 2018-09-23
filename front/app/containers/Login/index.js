@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control, jsx-a11y/label-has-for */
 import React from 'preact';
 import PropTypes from 'prop-types';
 // import { createStructuredSelector } from 'reselect';
@@ -18,9 +19,10 @@ class Login extends React.Component {
       [PASSWORD]: '',
     };
 
-    this.updateInputValue = this.updateInputValue.bind(this);
     this.submit = this.submit.bind(this);
+    this.updateInputValue = this.updateInputValue.bind(this);
     this.createNewAccount = this.createNewAccount.bind(this);
+    this.clearFields = this.clearFields.bind(this);
   }
 
   // componentWillUpdate(props) {
@@ -46,19 +48,27 @@ class Login extends React.Component {
 
   createNewAccount(event) {
     event.preventDefault();
+    this.clearFields();
     this.setState(state => Object.assign({}, state, { createMode: !state.createMode }));
   }
 
+  clearFields() {
+    this.setState(state => ({
+      ...state,
+      disabled: false,
+      createMode: false,
+      [USERNAME]: '',
+      [PASSWORD]: '',
+    }));
+  }
+
   render() {
-    const buttonClass = 'button' + (this.state.createMode ? ' warning' : '');
+    /* todo: have submit button be in state. Otherwise it will be buggy as
+    render won't undate enough to be tight. */
+    const buttonDisabled = this.state.disabled || (!this.state[USERNAME] && !this.state[PASSWORD]);
+    const buttonClass = `button ${this.state.createMode ? ' warning' : ''}`;
     if (this.props.selectAuthenticated === false && this.state.disabled) {
-      this.setState(state => ({
-        ...state,
-        disabled: false,
-        createMode: false,
-        [USERNAME]: '',
-        [PASSWORD]: '',
-      }));
+      this.clearFields();
     }
 
     return (
@@ -91,13 +101,13 @@ class Login extends React.Component {
             autoComplete="current-password"
             disabled={this.state.disabled}
           />
-          <a href="#" onClick={this.createNewAccount}>
+          <button href="#" type="button" onClick={this.createNewAccount}>
             {this.state.createMode ? 'Login With Existing Account' : 'Create New Account'}
-          </a>
+          </button>
           <input
             className={buttonClass}
             type="submit"
-            disabled={this.state.disabled}
+            disabled={buttonDisabled}
             value={this.state.createMode ? 'Create New Account' : 'Login'}
           />
         </form>
@@ -107,6 +117,7 @@ class Login extends React.Component {
 }
 Login.propTypes = {
   dispatchLogin: PropTypes.func,
+  selectAuthenticated: PropTypes.bool,
 };
 
 export function mapDispatchToProps(dispatch) {
