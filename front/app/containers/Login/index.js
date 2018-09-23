@@ -25,16 +25,8 @@ class Login extends React.Component {
     this.clearFields = this.clearFields.bind(this);
   }
 
-  // componentWillUpdate(props) {
-  //   if (!props.selectJWT) {
-  //     console.log('clear input');
-  //     this.setState(state => ({ ...state, disabled: false }));
-  //   }
-  // }
-
   submit(event) {
     event.preventDefault();
-    console.log('event', event);
     const { username, password, createMode } = this.state;
     this.setState(state => Object.assign({}, state, { disabled: true }));
     this.props.dispatchLogin({ username, password, createMode });
@@ -48,8 +40,12 @@ class Login extends React.Component {
 
   createNewAccount(event) {
     event.preventDefault();
-    this.clearFields();
-    this.setState(state => Object.assign({}, state, { createMode: !state.createMode }));
+    this.setState(state => ({
+      ...state,
+      createMode: !state.createMode,
+      [USERNAME]: '',
+      [PASSWORD]: '',
+    }));
   }
 
   clearFields() {

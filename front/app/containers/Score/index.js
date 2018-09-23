@@ -12,13 +12,12 @@ class Score extends React.Component {
     this.deckId = props.selectDeckId;
     this.correct = props.selectDeckCorrect;
     this.amount = props.selectDeckLength;
-    this.score = parseInt((this.correct / this.amount) * 100, 10);
+    this.score = parseInt(this.correct / this.amount * 100, 10);
 
     this.submit = this.submit.bind(this);
   }
 
   submit() {
-    console.log('submitting score');
     this.props.submit(this.score);
     this.props.dispatchPostScore({
       deckId: this.deckId,

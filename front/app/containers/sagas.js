@@ -39,7 +39,6 @@ export function* getDeckList() {
     url: 'decks/',
     headers: { 'x-access-token': jwtToken },
   });
-  console.log('decklist', get);
 
   const deckList = (get && get.data) || [];
   yield put({ type: 'SET_DECK_LIST', deckList });
@@ -55,7 +54,6 @@ export function* getDeck({ str }) {
 
   const deck = (get && get.data && get.data.deck) || null;
   const deckId = str;
-  console.log('deck', get, deck, deckId);
   yield put({ type: 'SET_DECK', deck, deckId });
 }
 

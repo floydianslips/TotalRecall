@@ -6,11 +6,22 @@ const Styles = styled.div`
   font-size: 19px;
   color: white;
 
-  // position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1;
+
+  .navbar-brand > div {
+    display: inline;
+  }
+  
+  .right {
+    float: right;
+
+    font-size: smaller;
+    color: #71a3f0;
+    cursor: pointer;
+  }
 `;
 
 export default Styles;

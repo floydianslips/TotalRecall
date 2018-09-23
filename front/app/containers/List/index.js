@@ -11,7 +11,6 @@ class List extends React.Component {
 
     const listIsEmpty = props.selectDeckList && props.selectDeckList.length === 0;
     if (listIsEmpty) {
-      console.log('dispatching GetDeckList(). Hopefully only once');
       props.dispatchGetDeckList();
     }
   }
