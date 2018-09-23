@@ -14,7 +14,7 @@ import Score from './Score';
 import reducer from './reducer';
 import saga from './sagas';
 import Styles from './styles';
-import { selectJWT } from './selectors';
+import { selectAuthenticated } from './selectors';
 
 /* eslint-disable react/prefer-stateless-function */
 class App extends React.Component {
@@ -48,18 +48,14 @@ class App extends React.Component {
   render() {
     /* eslint-disable no-else-return */
     const { deckSelected } = this.state;
-    const View = () => {
-      if (!this.props.selectJWT) {
-        console.log('1');
+    const View = props => {
+      if (!props.selectAuthenticated) {
         return <Login />;
       } else if (deckSelected === -1) {
-        console.log('2');
         return <Score submit={this.submit} />;
       } else if (deckSelected) {
-        console.log('3', deckSelected);
         return <Deck deckId={deckSelected} finishDeck={this.finishDeck} />;
       }
-      console.log('4');
       return <List deckClicked={this.deckClicked} />;
     };
 
@@ -75,7 +71,8 @@ class App extends React.Component {
 
 App.propTypes = {
   // dispatchGetDeckList: PropTypes.func,
-  selectJWT: PropTypes.string,
+  // selectJWT: PropTypes.string,
+  selectAuthenticated: PropTypes.bool,
 };
 
 export function mapDispatchToProps(/* dispatch */) {
@@ -85,7 +82,8 @@ export function mapDispatchToProps(/* dispatch */) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  selectJWT: selectJWT(),
+  // selectJWT: selectJWT(),
+  selectAuthenticated: selectAuthenticated(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

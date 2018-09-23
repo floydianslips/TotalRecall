@@ -11,6 +11,14 @@ const Style = styled.div`
     width: 100%;
     margin-top: 10px;
   }
+
+  .banner {
+    text-align: center;
+    background: #c44a5a;
+    color: white;
+    height: 30px;
+    line-height: 30px;
+  }
 `;
 
 export default Style;

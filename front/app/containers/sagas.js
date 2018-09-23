@@ -72,8 +72,9 @@ export function* postLogin({ obj }) {
     data,
   });
 
-  const token = (post && post.data && post.data.token) || '';
-  yield put({ type: 'SET_JWT', str: token });
+  const jwt = (post && post.data && post.data.token) || '';
+  const authenticated = Boolean(jwt);
+  yield put({ type: 'SET_JWT', jwt, authenticated });
 }
 
 export function* postScore({ obj }) {

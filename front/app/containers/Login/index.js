@@ -2,7 +2,9 @@ import React from 'preact';
 import PropTypes from 'prop-types';
 // import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 // import { selectDeckList } from '../selectors';
+import { selectJWT, selectAuthenticated } from './selector';
 import { USERNAME, PASSWORD } from './constants';
 import Styles from './styles';
 
@@ -20,6 +22,13 @@ class Login extends React.Component {
     this.submit = this.submit.bind(this);
     this.createNewAccount = this.createNewAccount.bind(this);
   }
+
+  // componentWillUpdate(props) {
+  //   if (!props.selectJWT) {
+  //     console.log('clear input');
+  //     this.setState(state => ({ ...state, disabled: false }));
+  //   }
+  // }
 
   submit(event) {
     event.preventDefault();
@@ -42,9 +51,21 @@ class Login extends React.Component {
 
   render() {
     const buttonClass = 'button' + (this.state.createMode ? ' warning' : '');
+    if (this.props.selectAuthenticated === false && this.state.disabled) {
+      this.setState(state => ({
+        ...state,
+        disabled: false,
+        createMode: false,
+        [USERNAME]: '',
+        [PASSWORD]: '',
+      }));
+    }
 
     return (
       <Styles>
+        <div className="banner" hidden={!(this.props.selectAuthenticated === false)}>
+          Incorrect Username or Password
+        </div>
         <form onSubmit={this.submit}>
           <label htmlFor={USERNAME}>Username</label>
           <input
@@ -94,8 +115,9 @@ export function mapDispatchToProps(dispatch) {
   };
 }
 
-// const mapStateToProps = createStructuredSelector({
-//   selectDeckList: selectDeckList(),
-// });
+const mapStateToProps = createStructuredSelector({
+  selectJWT: selectJWT(),
+  selectAuthenticated: selectAuthenticated(),
+});
 
-export default connect(undefined, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
