@@ -14,6 +14,8 @@ const selectDeckId = () => createSelector(selectHome, homeState => homeState && 
 
 const selectJWT = () => createSelector(selectHome, homeState => homeState && homeState.jwt);
 
+const selectAuthenticated = () => createSelector(selectHome, homeState => homeState && homeState.authenticated);
+
 export {
   selectDeck,
   selectDeckList,
@@ -21,4 +23,5 @@ export {
   selectDeckCorrect,
   selectDeckId,
   selectJWT,
+  selectAuthenticated,
 };

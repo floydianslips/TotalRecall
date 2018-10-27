@@ -2,6 +2,8 @@
 
 const initialState = {
   jwt: '',
+  authenticated: null,
+
   deckList: [],
   deck: null,
 
@@ -27,8 +29,7 @@ function homeReducer(state = initialState, action) {
     case 'ADD_CORRECT':
       return { ...state, correct: state.correct + 1 };
     case 'SET_JWT':
-      console.log('set jwt', action);
-      return { ...state, jwt: action.str };
+      return { ...state, jwt: action.jwt, authenticated: action.authenticated };
     default:
       return state;
   }

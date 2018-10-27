@@ -28,7 +28,6 @@ class Card extends React.Component {
     const prev = this.props && this.props.card && this.props.card.front && this.props.card.front.title;
     if (next !== prev) {
       // if new card, reset
-      console.log('new card!');
       this.props.showButtons(false);
       this.setState(state => ({
         ...state,

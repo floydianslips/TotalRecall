@@ -30,7 +30,7 @@ function developmentMiddleware(app, options) {
   app.use(webpackHotMiddleware(compiler));
 
   const fs = middleware.fileSystem; // Since webpackDevMiddleware uses memory-fs internally to store build artifacts, we use it instead
-  app.get('*', (req, res) => fs.readFile(
+  app.get('/', (req, res) => fs.readFile(
     path.join(compiler.outputPath, 'index.html'), (err, file) => err ? res.sendStatus(404) : res.send(file.toString()))
   );
 }

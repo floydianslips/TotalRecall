@@ -1,8 +1,11 @@
+/* eslint-disable jsx-a11y/label-has-associated-control, jsx-a11y/label-has-for */
 import React from 'preact';
 import PropTypes from 'prop-types';
 // import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 // import { selectDeckList } from '../selectors';
+import { selectJWT, selectAuthenticated } from './selector';
 import { USERNAME, PASSWORD } from './constants';
 import Styles from './styles';
 
@@ -16,14 +19,14 @@ class Login extends React.Component {
       [PASSWORD]: '',
     };
 
-    this.updateInputValue = this.updateInputValue.bind(this);
     this.submit = this.submit.bind(this);
+    this.updateInputValue = this.updateInputValue.bind(this);
     this.createNewAccount = this.createNewAccount.bind(this);
+    this.clearFields = this.clearFields.bind(this);
   }
 
   submit(event) {
     event.preventDefault();
-    console.log('event', event);
     const { username, password, createMode } = this.state;
     this.setState(state => Object.assign({}, state, { disabled: true }));
     this.props.dispatchLogin({ username, password, createMode });
@@ -37,14 +40,38 @@ class Login extends React.Component {
 
   createNewAccount(event) {
     event.preventDefault();
-    this.setState(state => Object.assign({}, state, { createMode: !state.createMode }));
+    this.setState(state => ({
+      ...state,
+      createMode: !state.createMode,
+      [USERNAME]: '',
+      [PASSWORD]: '',
+    }));
+  }
+
+  clearFields() {
+    this.setState(state => ({
+      ...state,
+      disabled: false,
+      createMode: false,
+      [USERNAME]: '',
+      [PASSWORD]: '',
+    }));
   }
 
   render() {
-    const buttonClass = 'button' + (this.state.createMode ? ' warning' : '');
+    /* todo: have submit button be in state. Otherwise it will be buggy as
+    render won't undate enough to be tight. */
+    const buttonDisabled = this.state.disabled || (!this.state[USERNAME] && !this.state[PASSWORD]);
+    const buttonClass = `button ${this.state.createMode ? ' warning' : ''}`;
+    if (this.props.selectAuthenticated === false && this.state.disabled) {
+      this.clearFields();
+    }
 
     return (
       <Styles>
+        <div className="banner" hidden={!(this.props.selectAuthenticated === false)}>
+          Incorrect Username or Password
+        </div>
         <form onSubmit={this.submit}>
           <label htmlFor={USERNAME}>Username</label>
           <input
@@ -70,13 +97,13 @@ class Login extends React.Component {
             autoComplete="current-password"
             disabled={this.state.disabled}
           />
-          <a href="#" onClick={this.createNewAccount}>
+          <button href="#" type="button" onClick={this.createNewAccount}>
             {this.state.createMode ? 'Login With Existing Account' : 'Create New Account'}
-          </a>
+          </button>
           <input
             className={buttonClass}
             type="submit"
-            disabled={this.state.disabled}
+            disabled={buttonDisabled}
             value={this.state.createMode ? 'Create New Account' : 'Login'}
           />
         </form>
@@ -86,6 +113,7 @@ class Login extends React.Component {
 }
 Login.propTypes = {
   dispatchLogin: PropTypes.func,
+  selectAuthenticated: PropTypes.bool,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -94,8 +122,9 @@ export function mapDispatchToProps(dispatch) {
   };
 }
 
-// const mapStateToProps = createStructuredSelector({
-//   selectDeckList: selectDeckList(),
-// });
+const mapStateToProps = createStructuredSelector({
+  selectJWT: selectJWT(),
+  selectAuthenticated: selectAuthenticated(),
+});
 
-export default connect(undefined, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

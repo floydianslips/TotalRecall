@@ -39,7 +39,6 @@ export function* getDeckList() {
     url: 'decks/',
     headers: { 'x-access-token': jwtToken },
   });
-  console.log('decklist', get);
 
   const deckList = (get && get.data) || [];
   yield put({ type: 'SET_DECK_LIST', deckList });
@@ -55,7 +54,6 @@ export function* getDeck({ str }) {
 
   const deck = (get && get.data && get.data.deck) || null;
   const deckId = str;
-  console.log('deck', get, deck, deckId);
   yield put({ type: 'SET_DECK', deck, deckId });
 }
 
@@ -72,8 +70,9 @@ export function* postLogin({ obj }) {
     data,
   });
 
-  const token = (post && post.data && post.data.token) || '';
-  yield put({ type: 'SET_JWT', str: token });
+  const jwt = (post && post.data && post.data.token) || '';
+  const authenticated = Boolean(jwt);
+  yield put({ type: 'SET_JWT', jwt, authenticated });
 }
 
 export function* postScore({ obj }) {

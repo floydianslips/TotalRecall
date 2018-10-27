@@ -49,6 +49,11 @@
     },
     "settings": {
       "import/resolver": {
+        "node": {
+          "paths": [
+            "front/app"
+          ]
+        },
         "webpack": {
           "config": "./internals/webpack/prod.js"
         }

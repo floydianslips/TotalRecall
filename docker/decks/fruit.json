@@ -1,0 +1,47 @@
+{ 
+  "name": "Fruit",
+  "id": "fruit",
+  "icon": "🍍🍊🥑🍅",
+  "cards": [
+    {
+      "front": {
+        "title": "Apple",
+        "subtitle": "Malus pumila",
+        "body": "fruit or vegitable?"
+      },
+      "back": {
+        "body": "It is a fruit!"
+      }
+    },
+    {
+      "front": {
+        "title": "Apricot",
+        "subtitle": "pumila pumila",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras maximus finibus cursus. Integer cursus massa orci, consectetur eleifend lorem euismod et. Ut nisl tellus, aliquam et scelerisque et, eleifend fermentum velit. Suspendisse arcu arcu, lacinia eget placerat vitae, sodales vitae nibh. Proin vel ex vehicula, dapibus erat a, varius purus. In velit sem, convallis id blandit sed, aliquet eget justo. Pellentesque vitae pulvinar erat. Maecenas vestibulum ex ut est cursus cursus. Proin consectetur dolor a nisi placerat, quis fringilla justo ullamcorper. Donec vitae vulputate lacus. Vivamus vitae hendrerit felis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam purus mauris, suscipit ut mattis porta, sollicitudin eu nibh."
+      },
+      "back": {
+        "body": "Suspendisse vehicula maximus neque, vitae pellentesque ipsum dictum ut. Sed lobortis porta rhoncus. In vulputate ultrices felis, a fringilla lorem blandit in. Duis nec pellentesque mi. Ut scelerisque lacinia justo, id efficitur felis suscipit eu. Nulla vitae euismod nisi. Quisque blandit sagittis sem, quis molestie massa tincidunt nec. In hac habitasse platea dictumst."
+      }
+    },
+    {
+      "front": {
+        "title": "Tomato",
+        "subtitle": "red thing",
+        "body": "is this item a fruit or vegitable? Many people around the world have argued this fact for ages. Some even lobbied for this to be counted as a vegitable so pizza can stay in the menus at schools."
+      },
+      "back": {
+        "body": "It is a vegitable! Joke! Its a fruit"
+      }
+    },
+    {
+      "front": {
+        "title": "Gameboy",
+        "subtitle": "advance",
+        "body": "fruit or vegitable?"
+      },
+      "back": {
+        "body": "neither"
+      }
+    }
+  ]
+}
