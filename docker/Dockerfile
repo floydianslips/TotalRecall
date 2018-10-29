@@ -6,7 +6,7 @@ RUN \
   apt-get clean
 
 RUN \
-  wget https://nodejs.org/dist/latest/node-v10.11.0-linux-armv6l.tar.xz && \
+  wget https://nodejs.org/dist/v10.11.0/node-v10.11.0-linux-armv6l.tar.xz && \
   tar xf node-v10.11.0-linux-armv6l.tar.xz && \
   cp -R node-v10.11.0-linux-armv6l/* /usr/local/ && \
   ln -s /usr/local/bin/node /usr/sbin/node && \
@@ -15,6 +15,12 @@ RUN \
   rm node-v10.11.0-linux-armv6l.tar.xz
 
 RUN git clone https://github.com/darkenvy/TotalRecall.git
+
+WORKDIR /TotalRecall/front/
+
+RUN npm install
+
+RUN npm run build
 
 WORKDIR /TotalRecall/server/
 
