@@ -23,4 +23,4 @@ sudo docker run \
   -p 7100:7100 \
   -v $(pwd)/decks/:/TotalRecall/server/decks/ \
   -v $(pwd)/total-recall.sqlite:/TotalRecall/server/flashy.sqlite \
-  total-recall:latest
+  darkenvy/total-recall
