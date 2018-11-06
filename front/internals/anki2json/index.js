@@ -7,14 +7,14 @@ const readline = require('readline');
 const filename = 'advanced.json';
 const mapping = {
   front: [
-    ['Spanish'],
-    ['Part', 'Source', 'Ranking'],
-    ['Example Spanish'],
+    ['English'],
+    [],
+    [],
   ],
   back: [
-    ['English'],
-    ['Part', 'Source', 'Example Source', 'Ranking'],
-    ['Example English'],
+    ['Burmese'],
+    ['IPA'],
+    [],
   ],
 };
 
